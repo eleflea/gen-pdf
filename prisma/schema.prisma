@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model WeeklyReport {
+  id                  String   @id @default(cuid())
+  studentName         String
+  studentId           Int
+  organisation        String
+  industrySupervisor  String
+  datePrepared        DateTime
+  weekNumber          Int
+  tasks               Task[]
+  plansForNextWeek    String
+  totalHours          Float
+  isSigned            Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Task {
+  id          String       @id @default(cuid())
+  day         Int
+  date        DateTime
+  description String
+  hoursSpent  Float
+  report      WeeklyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reportId    String
+}
+

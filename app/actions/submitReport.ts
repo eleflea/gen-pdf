@@ -1,5 +1,4 @@
 "use server";
-import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { FormSchema } from "../reports/mid-week/mid-intern-reportschema";
 
@@ -30,6 +29,7 @@ export async function createMidInternReport(formData: FormData) {
     });
     return { success: true, data: report };
   } catch (error) {
+    console.log("Error while submitting report:", error);
     return { success: false, error: "Failed to create report" };
   }
 }

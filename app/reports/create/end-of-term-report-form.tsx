@@ -28,7 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { createEndOfTermReport } from "@/app/actions/reports";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
+import { cn, END_OF_TERM_QUESTIONS, getEndOfTermScoreDesc } from "@/lib/utils";
 
 const scoreItemSchema = z.object({
   question: z.string().min(1, "Question is required"),
@@ -63,12 +63,10 @@ export function EndOfTermReportForm() {
       organisation: "",
       industrySupervisor: "",
       dateOfSubmit: new Date(),
-      scoreItems: [
-        {
-          question: "",
-          score: 1,
-        },
-      ],
+      scoreItems: END_OF_TERM_QUESTIONS.map((question) => ({
+        question,
+        score: 1,
+      })),
       studentComments: "",
       supervisorComments: "",
       studentSignature: "",
@@ -242,45 +240,43 @@ export function EndOfTermReportForm() {
             <Card key={field.id}>
               <CardContent className="pt-6">
                 <div className="grid gap-4">
-                    <FormField
-                        control={form.control}
-                        name={`scoreItems.${fields.indexOf(field)}.question`}
-                        render={({ field: questionField }) => (
-                            <FormItem>
-                                <FormLabel>Question</FormLabel>
-                                <FormControl>
-                                    <Input {...questionField} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name={`scoreItems.${fields.indexOf(field)}.score`}
-                        render={({ field: scoreField }) => (
-                            <FormItem>
-                                <FormLabel>Score (1-5)</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="number"
-                                        min={1}
-                                        max={5}
-                                        {...scoreField}
-                                        onChange={(e) => scoreField.onChange(parseInt(e.target.value))}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                                <p className="text-sm text-muted-foreground">
-                                    {scoreField.value === 1 && "Poor - Needs significant improvement"}
-                                    {scoreField.value === 2 && "Below Average - Some improvement needed"}
-                                    {scoreField.value === 3 && "Average - Meets basic expectations"}
-                                    {scoreField.value === 4 && "Above Average - Exceeds expectations"}
-                                    {scoreField.value === 5 && "Excellent - Outstanding performance"}
-                                </p>
-                            </FormItem>
-                        )}
-                    />
+                  <FormField
+                    control={form.control}
+                    name={`scoreItems.${fields.indexOf(field)}.question`}
+                    render={({ field: questionField }) => (
+                      <FormItem>
+                        <FormLabel>Question</FormLabel>
+                        <FormControl>
+                          <Input {...questionField} readOnly={true} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`scoreItems.${fields.indexOf(field)}.score`}
+                    render={({ field: scoreField }) => (
+                      <FormItem>
+                        <FormLabel>Score (1-5)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min={1}
+                            max={5}
+                            {...scoreField}
+                            onChange={(e) =>
+                              scoreField.onChange(parseInt(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                        <p className="text-sm text-muted-foreground">
+                          {getEndOfTermScoreDesc(scoreField.value)}
+                        </p>
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </CardContent>
             </Card>

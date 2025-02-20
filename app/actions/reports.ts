@@ -5,13 +5,13 @@ import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
-export type CreateReportTask = Pick<
+export type CreateWeeklyReportTask = Pick<
   Task,
   "day" | "date" | "description" | "hoursSpent"
 >;
 
-export type CreateReportData = Pick<
-  WeeklyReport & { tasks: CreateReportTask[] },
+export type CreateWeeklyReportData = Pick<
+  WeeklyReport & { tasks: CreateWeeklyReportTask[] },
   | "studentName"
   | "studentId"
   | "organisation"
@@ -23,7 +23,7 @@ export type CreateReportData = Pick<
   | "tasks"
 >;
 
-export async function createReport(data: CreateReportData) {
+export async function createWeeklyReport(data: CreateWeeklyReportData) {
   try {
     const report = await prisma.weeklyReport.create({
       data: {
@@ -36,7 +36,7 @@ export async function createReport(data: CreateReportData) {
         plansForNextWeek: data.plansForNextWeek,
         totalHours: data.totalHours,
         tasks: {
-          create: data.tasks.map((task: CreateReportTask) => ({
+          create: data.tasks.map((task: CreateWeeklyReportTask) => ({
             day: task.day,
             date: task.date,
             description: task.description,
@@ -57,7 +57,7 @@ export async function createReport(data: CreateReportData) {
   }
 }
 
-export async function getReports() {
+export async function getWeeklyReports() {
   try {
     const reports = await prisma.weeklyReport.findMany({
       include: {
@@ -74,7 +74,7 @@ export async function getReports() {
   }
 }
 
-export async function deleteReport(id: string) {
+export async function deleteWeeklyReport(id: string) {
   try {
     await prisma.weeklyReport.delete({
       where: { id },
@@ -87,7 +87,7 @@ export async function deleteReport(id: string) {
   }
 }
 
-export async function signReport(id: string) {
+export async function signWeeklyReport(id: string) {
   try {
     const report = await prisma.weeklyReport.update({
       where: { id },

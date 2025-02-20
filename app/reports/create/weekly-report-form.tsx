@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { createReport } from "@/app/actions/reports";
+import { createWeeklyReport } from "@/app/actions/reports";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -80,7 +80,7 @@ export function WeeklyReportForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsSubmitting(true);
-      const result = await createReport({
+      const result = await createWeeklyReport({
         ...values,
         totalHours,
       });

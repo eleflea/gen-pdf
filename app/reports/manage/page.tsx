@@ -1,9 +1,9 @@
-import { getReports, getEndOfTermReports } from "@/app/actions/reports"
+import { getWeeklyReports, getEndOfTermReports } from "@/app/actions/reports"
 import { ManageReportsClient } from "./manage-reports-client"
 
 export default async function ManageReports() {
   const [weeklyReports, endOfTermReports] = await Promise.all([
-    getReports(),
+    getWeeklyReports(),
     getEndOfTermReports(),
   ])
 

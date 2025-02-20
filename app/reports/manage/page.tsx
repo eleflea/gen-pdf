@@ -1,13 +1,25 @@
-import { getReports } from "@/app/actions/reports"
+import { getWeeklyReports, getEndOfTermReports } from "@/app/actions/reports"
 import { ManageReportsClient } from "./manage-reports-client"
 
 export default async function ManageReports() {
-  const { data: reports, error } = await getReports()
+  const [weeklyReports, endOfTermReports] = await Promise.all([
+    getWeeklyReports(),
+    getEndOfTermReports(),
+  ])
 
-  if (error) {
-    return <div className="container py-10">Error loading reports: {error}</div>
+  if (weeklyReports.error || endOfTermReports.error) {
+    return (
+      <div className="container py-10">
+        Error loading reports: {weeklyReports.error || endOfTermReports.error}
+      </div>
+    )
   }
 
-  return <ManageReportsClient initialReports={reports} />
+  return (
+    <ManageReportsClient
+      initialWeeklyReports={weeklyReports.data}
+      initialEndOfTermReports={endOfTermReports.data}
+    />
+  )
 }
 

@@ -33,3 +33,28 @@ model Task {
   reportId    String
 }
 
+model EndOfTermReport {
+  id                      String       @id @default(cuid())
+  studentName            String
+  studentId              Int
+  organisation          String
+  industrySupervisor    String
+  dateOfSubmit          DateTime
+  studentComments       String
+  supervisorComments    String
+  studentSignature      String
+  studentSignatureDate  DateTime
+  supervisorSignature   String?
+  supervisorSignatureDate DateTime?
+  scoreItems           ScoreItem[]
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+}
+
+model ScoreItem {
+  id          String          @id @default(cuid())
+  question    String
+  score       Int
+  report      EndOfTermReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reportId    String
+}

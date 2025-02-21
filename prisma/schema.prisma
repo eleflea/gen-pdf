@@ -58,3 +58,18 @@ model ScoreItem {
   report      EndOfTermReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
   reportId    String
 }
+
+model MidInternshipReviewForm {
+  id                         String             @id @default(cuid())
+  studentName                String
+  studentId                  String
+  organization               String
+  supervisor                 String
+  dateOfVisit                DateTime?
+  studentComments            String
+  studentSignature          String
+  selfAssessments            Json?         
+  createdAt                  DateTime           @default(now())
+  updatedAt                  DateTime           @updatedAt
+      
+}

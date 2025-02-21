@@ -11,7 +11,10 @@ export async function createMidInternReport(formData: FormData) {
     dateOfVisit: formData.get("dateOfVisit")
       ? new Date(formData.get("dateOfVisit") as string)
       : null,
-    selfAssessment: formData.getAll("selfAssessment"),
+    // Ensure proper parsing of self-assessment JSON
+    selfAssessments: formData.get("selfAssessment")
+      ? JSON.parse(formData.get("selfAssessment") as string) // Parse the selfAssessment JSON string
+      : [],
     studentComments: formData.get("studentComments"),
     studentSignature: formData.get("studentSignature"),
   });
@@ -24,12 +27,22 @@ export async function createMidInternReport(formData: FormData) {
   }
 
   try {
-    const report = await prisma.midInternshipReport.create({
-      data: validatedFields.data,
+    const report = await prisma.midInternshipReviewForm.create({
+      data: {
+        studentName: validatedFields.data.studentName,
+        studentId: validatedFields.data.studentId,
+        organization: validatedFields.data.organization,
+        supervisor: validatedFields.data.supervisor,
+        dateOfVisit: validatedFields.data.dateOfVisit,
+        selfAssessments: validatedFields.data.selfAssessments,
+        studentComments: validatedFields.data.studentComments,
+        studentSignature: validatedFields.data.studentSignature,
+      },
     });
+
     return { success: true, data: report };
   } catch (error) {
-    console.log("Error while submitting report:", error);
+    console.error("Error while submitting report:", error);
     return { success: false, error: "Failed to create report" };
   }
 }

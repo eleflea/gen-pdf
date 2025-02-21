@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 
 async function getReports() {
-  return await prisma.midInternshipReport.findMany({
+  return await prisma.midInternshipReviewForm.findMany({
     orderBy: { createdAt: "desc" },
   });
 }
@@ -31,7 +31,6 @@ export default async function ManageReportsPage() {
             <TableHead>Organization</TableHead>
             <TableHead>Industry Supervisor</TableHead>
             <TableHead>Date of Visit</TableHead>
-            <TableHead>Self-Assessment</TableHead>
             <TableHead>Student Comments</TableHead>
             <TableHead>Student Signature</TableHead>
 
@@ -48,10 +47,6 @@ export default async function ManageReportsPage() {
               <TableCell>{report.supervisor}</TableCell>
               <TableCell>
                 {report.dateOfVisit ? format(report.dateOfVisit, "PP") : "N/A"}
-              </TableCell>
-              <TableCell>
-                {/* Displaying self-assessment count as a placeholder */}
-                {report.selfAssessment.length} fields completed
               </TableCell>
               <TableCell>{report.studentComments}</TableCell>
               <TableCell>{report.studentSignature}</TableCell>
